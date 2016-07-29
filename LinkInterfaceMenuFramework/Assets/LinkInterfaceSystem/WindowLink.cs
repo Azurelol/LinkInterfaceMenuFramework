@@ -37,13 +37,13 @@ namespace LinkInterfaceSystem
       //this.Target.Describe();
     }
 
-    protected override void OnDescribe()
-    {
-      var descriptionEvent = new DescriptionEvent();
-      descriptionEvent.Title = this.Title;
-      descriptionEvent.Subtitle = this.Subtitle;
-      this.Interface.gameObject.Dispatch<DescriptionEvent>(descriptionEvent);
-    }
+    //protected override void OnDescribe()
+    //{
+    //  var descriptionEvent = new DescriptionEvent();
+    //  descriptionEvent.Title = this.Title;
+    //  descriptionEvent.Subtitle = this.Subtitle;
+    //  this.Interface.gameObject.Dispatch<DescriptionEvent>(descriptionEvent);
+    //}
 
     public override void OnDeselect()
     {

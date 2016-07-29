@@ -18,15 +18,14 @@ namespace LinkInterfaceSystem
   /**************************************************************************/
   public abstract class LinkInterface : MonoBehaviour
   {
-    public bool Tracing = false;
+    [HideInInspector] public bool Tracing = false;
     protected bool Enabled = false;
     public bool Active
     {
       set { this.gameObject.SetActive(value); }
       get { return this.gameObject.activeSelf; }
-    }
-    public Transform Links;
-    protected List<Link> AvailableLinks = new List<Link>();
+    }    
+    protected LinkController Controller;
     protected Link CurrentLink;
 
     /**************************************************************************/
@@ -42,8 +41,9 @@ namespace LinkInterfaceSystem
       this.gameObject.Connect<Link.OpenedEvent>(this.OnLinkOpenedEvent);
       this.gameObject.Connect<Link.ClosedEvent>(this.OnLinkClosedEvent);
 
-      // Add all available links
-      RegisterLinks();
+      // Look for the LinkController among the children
+      Controller = GetComponentInChildren<LinkController>();
+      if (Controller) Controller.Connect(this);
 
       // Initialize the interface subclass
       this.OnInterfaceInitialize();
@@ -122,38 +122,29 @@ namespace LinkInterfaceSystem
       }
 
       return false;
-    }
-
-    /**************************************************************************/
-    /*!
-    @brief Adds a link to the interface.
-    @param window The link to be added.
-    */
-    /**************************************************************************/
-    protected void Add(Link link)
-    {
-      if (Tracing) Trace.Script("Added '" + link.gameObject.name + "' !", this);
-      AvailableLinks.Add(link);
-    }
+    }    
 
     /**************************************************************************/
     /*!
     @brief Registers all links (children with a Link component).
     */
     /**************************************************************************/
-    void RegisterLinks()
-    {
-      if (!Links)
-        return;
-
-      // Add all available links
-      var availableLInks = Links.GetComponentsInChildren<Link>(true);
-      foreach (var link in availableLInks)
-      {
-        Add(link);
-        link.Interface = this;
-      }
-    }
+    //void RegisterLinks()
+    //{
+    //  if (!Links)
+    //    return;
+    //
+    //  // Look for a controller among children
+    //  Controller = GetComponentInChildren<LinkController>();
+    //
+    //  // Add all available links
+    //  var availableLInks = Links.GetComponentsInChildren<Link>(true);
+    //  foreach (var link in availableLInks)
+    //  {
+    //    Add(link);
+    //    link.Interface = this;
+    //  }
+    //}
 
     /**************************************************************************/
     /*!
@@ -166,7 +157,7 @@ namespace LinkInterfaceSystem
       Active = true;
 
       // Perhaps allow the interface to select which will be its active window?
-      if (AvailableLinks.Count > 0) CurrentLink = AvailableLinks[0];
+      if (Controller && Controller.Links.Count > 0) CurrentLink = Controller.Links[0];
       // If there's a link available, select it
       if (CurrentLink) CurrentLink.Select();
 

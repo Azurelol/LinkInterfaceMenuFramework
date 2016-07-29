@@ -18,7 +18,7 @@ namespace LinkInterfaceSystem
   /**************************************************************************/
   public class WindowDescription : MonoBehaviour
   {
-    public Text TitleText, SubtitleText, DescriptionText;
+    public Text TitleText, SubtitleText, HelpText;
 
     /**************************************************************************/
     /*!
@@ -32,9 +32,18 @@ namespace LinkInterfaceSystem
 
     void OnLinkDescriptionEvent(Link.DescriptionEvent e)
     {
-      if (e.Title != null) UpdateTitle(e.Title);
-      if (e.Subtitle != null) UpdateSubtitle(e.Subtitle);
-      if (e.Description != null) UpdateDescription(e.Description);
+      switch (e.Description.Type)
+      {
+        case Link.LinkDescription.DescriptionType.Title:
+          UpdateTitle(e.Description.Message);
+          break;
+        case Link.LinkDescription.DescriptionType.Subtitle:
+          UpdateSubtitle(e.Description.Message);
+          break;
+        case Link.LinkDescription.DescriptionType.Help:
+          UpdateHelp(e.Description.Message);
+          break;
+      }
     }
 
     void OnWindowDescriptionEvent(Window.DescriptionEvent e)
@@ -64,12 +73,12 @@ namespace LinkInterfaceSystem
       SubtitleText.text = text;
     }
 
-    void UpdateDescription(string text)
+    void UpdateHelp(string text)
     {
-      if (!DescriptionText)
+      if (!HelpText)
         return;
 
-      DescriptionText.text = text;
+      HelpText.text = text;
     }
 
 

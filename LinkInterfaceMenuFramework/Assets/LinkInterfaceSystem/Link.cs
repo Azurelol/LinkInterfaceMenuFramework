@@ -6,9 +6,7 @@
 */
 /******************************************************************************/
 using UnityEngine;
-using Stratus;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
 using System;
 
 namespace LinkInterfaceSystem
@@ -32,17 +30,28 @@ namespace LinkInterfaceSystem
       public Link OnNavigateLeft;
       public Link OnNavigateRight;
     }
-        
+
+    [Serializable]
+    public class LinkStyle
+    {
+      public Color SelectedColor = Color.red;
+      public Color ActiveColor = Color.blue;
+    }        
+
+    [Serializable]
+    public class LinkDescription
+    {
+      public enum DescriptionType { Title, Subtitle, Help }
+      public DescriptionType Type;
+      public string Message;
+    }
+
     //------------------------------------------------------------------------/
     // Events
     public class DescriptionEvent : Stratus.Event
     {
-      public enum Type { Title, Description, Help }
-      public string Title;
-      public string Subtitle;
-      public string Description;
-      //public string Help;      
-      public DescriptionEvent(string description) { Description = description; }
+      public LinkDescription Description;  
+      public DescriptionEvent(LinkDescription description) { Description = description; }
       public DescriptionEvent() { }
     }
 
@@ -51,23 +60,24 @@ namespace LinkInterfaceSystem
 
     public enum NavigationMode { Automatic, Manual }
     //------------------------------------------------------------------------/
-    public bool Tracing = false;
-
+    // Inspector
+    //------------------------------------------------------------------------/
+    // The description of this link
+    public LinkDescription Description;
     // The neighbouring links
     public LinkNavigation Navigation;
-    // The description of this link
-    public string Description;
     // Whether this link has been activated
     [HideInInspector] public bool Active;
     // The interface this link has been registered to
     [HideInInspector] public LinkInterface Interface;
 
-    bool MouseEnabled = false;
+    [HideInInspector] public bool Tracing = false;
+    //bool MouseEnabled = false;
     //------------------------------------------------------------------------/
     public Image Image { get { return GetComponent<Image>(); } }
     // Colors
-    public Color SelectedColor = Color.red;
-    public Color ActiveColor = Color.blue;
+    public LinkStyle Style;    
+    
     Color DefaultColor;
     // Other
     Vector2 DefaultScale;
@@ -244,7 +254,7 @@ namespace LinkInterfaceSystem
 
     public void Select()
     {
-      Image.CrossFadeColor(this.SelectedColor, 0.5f, true, true);
+      Image.CrossFadeColor(this.Style.SelectedColor, 0.5f, true, true);
       this.OnDescribe();
       this.OnSelect();
     }    
@@ -257,14 +267,14 @@ namespace LinkInterfaceSystem
     public void Open()
     {
       Active = true;
-      Image.CrossFadeColor(this.ActiveColor, 0.5f, true, true);
+      Image.CrossFadeColor(this.Style.ActiveColor, 0.5f, true, true);
       this.Interface.gameObject.Dispatch<OpenedEvent>(new OpenedEvent());
       this.OnOpen();
     }
 
     public void Close()
     {
-      Image.CrossFadeColor(this.SelectedColor, 0.5f, true, true);
+      Image.CrossFadeColor(this.Style.SelectedColor, 0.5f, true, true);
       this.Interface.gameObject.Dispatch<ClosedEvent>(new ClosedEvent());      
       Active = false;
     }
@@ -273,7 +283,7 @@ namespace LinkInterfaceSystem
     {
       if (enabled)
       {
-        Image.CrossFadeColor(this.SelectedColor, 0.5f, true, true);
+        Image.CrossFadeColor(this.Style.SelectedColor, 0.5f, true, true);
       }
       else
       {

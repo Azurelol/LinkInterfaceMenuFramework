@@ -107,17 +107,27 @@ namespace LinkInterfaceSystem
     public void Hide()
     {
       Active = false;
-    }
-    
+    }   
 
     protected virtual void OnWindowInitialize() { }
-    protected virtual void OnWindowOpen() { }
+    protected virtual void OnWindowOpen()
+    {
+      this.Fit();      
+    }
     protected virtual void OnWindowClose() { }
     protected virtual void OnWindowCancel()
     {
       // Default behavior for a window when cancelled is to close
       this.Close();
     }
+
+    void Fit()
+    {
+      // Center this window      
+      this.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+    }
+
+
 
   }
 
