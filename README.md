@@ -24,3 +24,4 @@ The framework has the following dependencies:
 
 ## Changelog
 - (7/28/2016) Repository uploaded! Cleaned up the tentatively-named framework so it is truly modular. Given further thinking, decided to remove
+- (7/29/2016) Interface improved! Added the LinkController class which LinkStyle's will override those of its child links. Windows now reposition to the center of the canvas by default, allowing easier design of the menus.
