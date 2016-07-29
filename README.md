@@ -1,5 +1,5 @@
 # LinkInterfaceMenuFramework
-A framework for a generic component-based Menu system
+A framework for a composition-oriented generic component-based Menu system
 
 <img src ="/Header.png">
 
@@ -15,8 +15,12 @@ Given that, this time I wanted to do it better. Not just as a matter of personal
 
 As of now I strongly believe I have fulfilled that promise with the way the framework is as of now. While the prototype of it has been currently implemented in Unity through C#, it could be implemented and used in any ECS engine with a robust, customizable editor. I will be going over the design and classes, leaving language-specific implementation details as an exercise to the reader.
 
+## Notes
+- [Stratus Framework](https://github.com/Azurelol/StratusFramework): It uses the event system heavily in order to follow the observer pattern.
+The framework has the following dependencies:
+- [Ludiq Reflection](https://github.com/lazlo-bonin/unity-reflection): It uses a coupple of its inspector drawers (UnityVariable, UnityMethod) for some link behavior.
 
-# Documentation | [Web](https://docs.google.com/document/d/1ag4u-xh_ymxL3EFth453XrcqRoySuoF3eb9-AhKfaLA/edit?usp=sharing)
+## Documentation | [Web](https://docs.google.com/document/d/1ag4u-xh_ymxL3EFth453XrcqRoySuoF3eb9-AhKfaLA/edit?usp=sharing)
 
 ## Changelog
 - (7/28/2016) Repository uploaded! Cleaned up the tentatively-named framework so it is truly modular. Given further thinking, decided to remove
